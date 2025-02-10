@@ -9,11 +9,8 @@ def test(did_pass):
         msg = ("Test at line {0} FAILED.".format(linenum))
     print(msg)
 
-
-
 def to_secs(hours, minutes, seconds):
     return((hours * 3600) + (minutes * 60) + seconds)
-
 
 test(to_secs(2, 30, 10) == 9010)
 test(to_secs(2, 0, 0) == 7200)
