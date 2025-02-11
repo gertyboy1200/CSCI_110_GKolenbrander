@@ -1,6 +1,5 @@
 user_input = input("enter the number for the triangle nuber you want to solve for: ")
 
-
 def print_triangle_numbers(n):
     triangle_number = 0
     for i in range(int(n)):
