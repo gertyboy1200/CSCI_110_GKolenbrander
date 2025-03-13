@@ -1,33 +1,27 @@
-my_dict = {}
 import string
+import re
+import clean_dict_2
 
+my_dict = {}
 
 with open ("alice_in_wonderland.txt", 'r') as file:
-    lines = {line.strip() for line in file}
+    lines = file.readlines()
 
-for line in lines:
-    for word in line.split():
-        if word in my_dict:
-            my_dict[word] += 1
-            continue
-        else:
-            my_dict[word] = 1
+
+lines = clean_dict_2.clean_list(lines)
+
+    
+ 
+for word in lines:
+    if word in my_dict:
+        my_dict[word] += 1
+        continue
+    else:
+        my_dict[word] = 1
             
-            
-my_dict=  {k.lower(): v for k, v in my_dict.items()}
 
-keys = list(my_dict.keys())
-keys = sorted(keys)
-value = 0
-for i in range(len(keys)):
-    if keys[i] == 'a':
-        value = i
-        break
+         
+my_dict = clean_dict_2.clean_dict(my_dict)
 
-print(value)
-
-for j in range(value):
-    del my_dict[keys[j]]
-
-
-print(sorted(my_dict))
+for key in sorted(my_dict):
+    print(f"{key} : {my_dict[key]}")
