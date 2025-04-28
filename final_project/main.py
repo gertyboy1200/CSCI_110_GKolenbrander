@@ -41,14 +41,15 @@ while True:
         matching_ingredient = next((ingredient for ingredient in all_ingredients if ingredient.type == drawn_ingredient), None)
         with open("game_log.txt", "a") as log_file:
             if matching_ingredient:
+                ingredients.do_ingredient_action(matching_ingredient, player1)
                 log_file.write("Drawn ingredient details:\n")
                 log_file.write(str(matching_ingredient) + "\n")
-                print(matching_ingredient)
+                print()
                 print(player1)
+                print()
             else:
                 print("Ingredient not found in the class")
 
-    ingredients.do_ingredient_action(matching_ingredient, player1)
     
 
 

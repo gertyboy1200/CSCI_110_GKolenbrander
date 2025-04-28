@@ -3,7 +3,7 @@ class Player:
         self.name = name
         self.ingredients = [
         "garlic_1", "garlic_1", "garlic_1", "garlic_1",
-        "garlic_2", "garlic_2", "garlic_3"]  # List of ingredients (ingredients)
+        "garlic_2", "garlic_2", "garlic_3", "pumpkin_1", "garden_spider_1"]  # List of ingredients (ingredients)
         self.rubies = 0  # Currency used in the game
         self.droplet_position = 0  # Starting position in the pot
         self.victory_points = 0  # Total victory points

@@ -57,36 +57,49 @@ def get_ingredients():
 def do_ingredient_action(matching_ingredient, player):
     print("ingredient", matching_ingredient)
 
-    if matching_ingredient.type == "garlic_1":
-        garlic_1(player)
-    elif matching_ingredient.type == "garlic_2":
-        garlic_2(player)
-    elif matching_ingredient.type == "garlic_3":
-        garlic_3(player)
-    elif matching_ingredient.type == "ghosts_breath":
-        print("Ghost’s Breath effect: More purple chips grant extra victory points and rubies")
+
+    if matching_ingredient.color == "white":
+        garlic(matching_ingredient, player)
+
+
+    #if matching_ingredient.type == "garlic_1":
+    #    garlic_1(player)
+    #elif matching_ingredient.type == "garlic_2":
+    #    garlic_2(player)
+    #elif matching_ingredient.type == "garlic_3":
+    #    garlic_3(player)
+    #elif matching_ingredient.type == "ghosts_breath":
+    #    print("Ghost’s Breath effect: More purple chips grant extra victory points and rubies")
     elif matching_ingredient.type == "crow_skull":
         print("Crow Skull effect: Grants ruby if placed on a ruby space")
     else:
         print("No special effect for this ingredient")
 
 
+def garlic(matching_ingredient, player):
+    player.explosion_count += matching_ingredient.value
+    return player
+
 def garlic_1(player):
     player.explosion_count += 1
+    player.droplet_position += 1
     return player
 
 def garlic_2(player):
     player.explosion_count += 2
+    player.droplet_position += 2
     return player
 
 def garlic_3(player):
     player.explosion_count += 3
+    player.droplet_position += 3
     return player
 
 
 
-def pumpkin_1(): #cost 3
-    return 1
+def pumpkin_1(player): #cost 3
+    player.droplet_position += 1
+    return player
 
 
 #If you draw a red chip from your bag and there are no orange chips in your pot, 
