@@ -1,16 +1,17 @@
 class Player:
     def __init__(self, name):
         self.name = name
-        self.ingredients = [
-        "garlic_1", "garlic_1", "garlic_1", "garlic_1",
-        "garlic_2", "garlic_2", "garlic_3", "pumpkin_1", "garden_spider_1"]  # List of ingredients (ingredients)
+        self.bag = []  # List of bag (bag)
+        self.pot = []
         self.rubies = 0  # Currency used in the game
         self.droplet_position = 0  # Starting position in the pot
         self.victory_points = 0  # Total victory points
         self.explosion_count = 0
+        self.mandrake_marker = 0
+        self.money = 0
 
-    def add_ingredient(self, ingredients):
-        self.ingredients.append(ingredients)
+    def add_ingredient(self, bag):
+        self.bag.append(bag)
 
     def gain_rubies(self, amount):
         self.rubies += amount
@@ -25,5 +26,22 @@ class Player:
         return (f"self: {self.name}, Rubies: {self.rubies}, "
                 f"Droplet Position: {self.droplet_position}, "
                 f"Victory Points: {self.victory_points}, "
-                f"Ingredients: {self.ingredients}, "
-                f"explosion count: {self.explosion_count}")
+                f"explosion count: {self.explosion_count}, "
+                f"mandrake marker: {self.mandrake_marker}, "
+                f"money: {self.money}")
+
+
+def show_bag(self):
+    print(f"{self.name}'s Bag:")
+    for chip in self.bag:
+        print(f"- {chip.type}")
+
+
+def reset(self):
+    self.droplet_position = 0
+    self.mandrake_marker = 0
+    self.explosion_count = 0
+    self.money = 0
+    self.bag.extend(self.pot)
+    self.pot.clear() 
+

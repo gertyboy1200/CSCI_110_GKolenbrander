@@ -54,10 +54,20 @@ def get_ingredients():
 
     return all_ingredients
 
+def initialize_bag(player):
+    all_ingredients = get_ingredients()
+    player.bag.append(all_ingredients[0])
+    player.bag.append(all_ingredients[0])
+    player.bag.append(all_ingredients[0])
+    player.bag.append(all_ingredients[0])
+    player.bag.append(all_ingredients[1])
+    player.bag.append(all_ingredients[1])
+    player.bag.append(all_ingredients[2])
+    player.bag.append(all_ingredients[3])
+    player.bag.append(all_ingredients[10])
+
 def do_ingredient_action(matching_ingredient, player):
     print("ingredient", matching_ingredient)
-
-    
 
     if matching_ingredient.color == "white":
         garlic(matching_ingredient, player)
@@ -65,23 +75,48 @@ def do_ingredient_action(matching_ingredient, player):
     elif matching_ingredient.color == "orange":
         pumpkin(matching_ingredient, player)
 
+    elif matching_ingredient.color == "yellow":
+        mandrake(matching_ingredient, player)
+
+    elif matching_ingredient.color == "green":
+        garden_spider(matching_ingredient, player)
+
+    elif matching_ingredient.color == "red":
+        toadstool(matching_ingredient, player)
 
     elif matching_ingredient.color == "purple":
-        print("Ghost’s Breath effect: More purple chips grant extra victory points and rubies")
-    elif matching_ingredient.type == "crow_skull":
-        print("Crow Skull effect: Grants ruby if placed on a ruby space")
+        ghosts_breath(matching_ingredient, player)
+
+    elif matching_ingredient.color == "blue":
+        crow_skull(matching_ingredient, player)
+
     else:
-        print("No special effect for this ingredient")
+        print("ERRORRRRR")
 
 
 def garlic(matching_ingredient, player):
     player.explosion_count += matching_ingredient.value
-    player.droplet_position += matching_ingredient.value
+
+    if player.mandrake_marker == 1:
+        player.droplet_position += (matching_ingredient.value * 2)
+        player.mandrake_marker = 0
+    elif player.mandrake_marker == 0:
+        player.droplet_position += matching_ingredient.value
+    else:
+        print("ERROR")
+
     return player
 
 
 def pumpkin(matching_ingredient, player):
-    player.droplet_position += matching_ingredient.value
+    if player.mandrake_marker == 1:
+        player.droplet_position += (matching_ingredient.value * 2)
+        player.mandrake_marker = 0
+    elif player.mandrake_marker == 0:
+        player.droplet_position += matching_ingredient.value
+    else:
+        print("ERROR")
+
     return player
 
 
@@ -89,27 +124,29 @@ def pumpkin(matching_ingredient, player):
 # move the red chip forward only according to the value depicted on it. 
 # If there are already 1 or 2 orange chips in your pot, 
 # move the red chip an additional 1 space forward irrespective of its value.
-def toadstool_1(): #cost 6
-    return 1
-def toadstool_2(): #cost 10
-    return 2
-def toadstool_4(): #cost 16
-    return 4
 
+def toadstool(matching_ingredient, player):
+    if player.mandrake_marker == 1:
+        player.droplet_position += (matching_ingredient.value * 2)
+        player.mandrake_marker = 0
+    elif player.mandrake_marker == 0:
+        player.droplet_position += matching_ingredient.value
+    else:
+        print("ERROR")
 
 
 #Bonus: If you draw a yellow chip from the bag, move the next chip that you draw twice as far. 
 # For instance, a 2-chip that is drawn after a yellow chip is moved 4 spaces forward. 
 # The values of the yellow chips are of no significance.
-def mandrake_1():  #cost 9
-    return 1
-def mandrake_2(): #cost 13
-    return 2
-def mandrake_4():  #cost 19
-    return 4
 
-def mandrake(matching_ingredinet, player):
-    player.droplet_position += matching_ingredinet.value
+def mandrake(matching_ingredient, player):
+    if player.mandrake_marker == 1:
+        player.droplet_position += (matching_ingredient.value * 2)
+        player.mandrake_marker = 0
+    elif player.mandrake_marker == 0:
+        player.droplet_position += matching_ingredient.value
+    else:
+        print("ERROR")
     player.mandrake_marker = 1
     return(player)
 
@@ -117,13 +154,17 @@ def mandrake(matching_ingredinet, player):
 #Bonus: In Evaluation Phase B, you receive 1 ruby for every green chip 
 # (irrespective of its value) that was either the last chip placed in your pot or next to last. 
 # You do not receive any rubies for any green chips that are not on your last or next to last space.
-def garden_spider_1(): #cost 4
-    return 1
-def garden_spider_2(): #cost 8
-    return 2
-def garden_spider_4(): #cost 14
-    return 4
 
+def garden_spider(matching_ingredient, player):
+    if player.mandrake_marker == 1:
+        player.droplet_position += (matching_ingredient.value * 2)
+        player.mandrake_marker = 0
+    elif player.mandrake_marker == 0:
+        player.droplet_position += matching_ingredient.value
+    else:
+        print("ERROR")
+
+    return player
 
 
 #Bonus: In Evaluation Phase B, count up the purple chips in your pot. 
@@ -132,17 +173,29 @@ def garden_spider_4(): #cost 14
 # If there are 3 or more purple chips, you receive 2 victory points and you may move your droplet 1 space forward. 
 # There is no added bonus for 4 or more chips. However, it is always possible to use a lower action. 
 # For example, you can take the bonus for 2 purple chips even though you have 3 chips.
-def ghosts_breath_1(): #cost 9
-    return 1
 
+def ghosts_breath(matching_ingredient, player):
+    if player.mandrake_marker == 1:
+        player.droplet_position += (matching_ingredient.value * 2)
+        player.mandrake_marker = 0
+    elif player.mandrake_marker == 0:
+        player.droplet_position += matching_ingredient.value
+    else:
+        print("ERROR")
 
+    return player
 
 
 #Bonus: If you place a blue chip on a ruby space, you immediately receive 1 ruby. 
 # The values of the blue chips are of no significance.
-def crow_skull_1(): #cost 4
-    return 1
-def crow_skull_2(): #cost 8
-    return 2
-def crow_skull_4(): #cost 14
-    return 4
+
+def crow_skull(matching_ingredient, player):
+    if player.mandrake_marker == 1:
+        player.droplet_position += (matching_ingredient.value * 2)
+        player.mandrake_marker = 0
+    elif player.mandrake_marker == 0:
+        player.droplet_position += matching_ingredient.value
+    else:
+        print("ERROR")
+
+    return player
