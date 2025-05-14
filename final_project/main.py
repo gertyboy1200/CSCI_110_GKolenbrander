@@ -65,43 +65,51 @@ for round in range(2):
                         print()
                     else:
                         print("Ingredient not found in the class")
-            
-            
+        
+    clear_screen()
+    print(f"Welcome to the evaluation phase!")
+    print("There are 6 sections in the evaluation phase:")
+    print("A: Roll the bonus die (if your pot didn't explode).")
+    print("B: Resolve chip actions (purple, black, etc.).")
+    print("C: Gain rubies based on your final space.")
+    print("D: Gain victory points (or choose this if you exploded).")
+    print("E: Buy up to 2 chips (choose this if you exploded, instead of D).")
+    print("F: Spend 2 rubies to move your droplet forward.")
+    input("press enter to continue")
+    clear_screen()
+    print("PHASE A")
+        
+    non_exploded_players = [p for p in players if p.explosion_count <= 7]
+
+    if non_exploded_players:
+        # Find max droplet position
+        max_position = max(p.droplet_position for p in non_exploded_players)
+
+        # Find all players at that position
+        eligible_players = [p for p in non_exploded_players if p.droplet_position == max_position]
+
+        for p in eligible_players:
+            print(f"{p.name} gets to roll the bonus die!")
+            evaluation.bonus_die(p)
+    else:
+        print("No players are eligible to roll the bonus die.")
+    input("press enter to continue")
 
     for current_player_evaluating in players:
-        clear_screen()
-        print(f"Welcome to the evaluation phase, {current_player_evaluating.name}!")
-        print("There are 6 sections in the evaluation phase:")
-        print("A: Roll the bonus die (if your pot didn't explode).")
-        print("B: Resolve chip actions (purple, black, etc.).")
-        print("C: Gain rubies based on your final space.")
-        print("D: Gain victory points (or choose this if you exploded).")
-        print("E: Buy up to 2 chips (choose this if you exploded, instead of D).")
-        print("F: Spend 2 rubies to move your droplet forward.")
-        input("press enter to continue")
 
 
 
         # section A
         #if current players droplet position is greater than all others roll die
-        clear_screen()
-        print("PHASE A")
 
-        if all(current_player_evaluating.droplet_position > other.droplet_position for other in players if other != current_player_evaluating):
-            print(f"{current_player_evaluating.name} has the farthest droplet!")
-            evaluation.bonus_die(current_player_evaluating)
-            print(current_player_evaluating)
-
-
-        input("press enter to continue")
         # section B
         #chip actions
         clear_screen()
         print("PHASE B")
 
-
-
-
+        #evaluate green and purple
+        evaluation.garden_spider(current_player_evaluating)
+        evaluation.ghosts_breath(current_player_evaluating)
 
         input("press enter to continue")
 
@@ -168,6 +176,7 @@ for round in range(2):
 
 
 
+        #section f
 
 
 

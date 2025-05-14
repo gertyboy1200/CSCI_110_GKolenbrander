@@ -56,15 +56,15 @@ def get_ingredients():
 
 def initialize_bag(player):
     all_ingredients = get_ingredients()
-    player.bag.append(all_ingredients[0])
-    player.bag.append(all_ingredients[0])
-    player.bag.append(all_ingredients[0])
-    player.bag.append(all_ingredients[0])
-    player.bag.append(all_ingredients[1])
-    player.bag.append(all_ingredients[1])
-    player.bag.append(all_ingredients[2])
-    player.bag.append(all_ingredients[3])
-    player.bag.append(all_ingredients[10])
+    player.bag.append(all_ingredients[13])
+    player.bag.append(all_ingredients[13])
+    player.bag.append(all_ingredients[13])
+    player.bag.append(all_ingredients[13])
+    player.bag.append(all_ingredients[13])
+    player.bag.append(all_ingredients[13])
+    player.bag.append(all_ingredients[13])
+    player.bag.append(all_ingredients[13])
+    player.bag.append(all_ingredients[13])
 
 def do_ingredient_action(matching_ingredient, player):
     print("ingredient", matching_ingredient)
@@ -133,6 +133,20 @@ def toadstool(matching_ingredient, player):
         player.droplet_position += matching_ingredient.value
     else:
         print("ERROR")
+    
+    total_orange_in_pot =0
+
+
+    for chip in player.pot:
+        if chip.color == "orange":
+            total_orange_in_pot += 1
+        
+    if total_orange_in_pot == 1 or total_orange_in_pot == 2:
+        player.droplet_position += 1
+    elif total_orange_in_pot >= 3:
+        player.droplet_position += 2
+    else:
+        print("you had no orange chips no bonus")
 
 
 #Bonus: If you draw a yellow chip from the bag, move the next chip that you draw twice as far. 
@@ -147,6 +161,7 @@ def mandrake(matching_ingredient, player):
         player.droplet_position += matching_ingredient.value
     else:
         print("ERROR")
+
     player.mandrake_marker = 1
     return(player)
 

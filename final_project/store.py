@@ -59,7 +59,6 @@ def the_store_ui(current_player_evaluating, the_store, board_data):
                 # Successful purchase
                 the_store.buy_chip(current_player_evaluating, chip_index)
                 bought_colors.append(selected_chip.color)
-                current_player_evaluating.money -= selected_chip.cost
                 purchases += 1
                 input()
 

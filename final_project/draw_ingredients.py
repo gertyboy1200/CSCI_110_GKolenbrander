@@ -10,6 +10,8 @@ def draw_ingredient(player):
     if player.bag:
         drawn = player.bag.pop()
         player.pot.append(drawn)
+        print(player.bag)
+        print(player.pot)
         return drawn
     return None
 

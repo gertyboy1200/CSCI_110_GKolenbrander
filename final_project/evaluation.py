@@ -49,3 +49,51 @@ def bonus_die(player):
         pumpkin_chip = ingredients.create_ingredient("pumpkin_1", "orange", 1, 0)
         player.bag.append(pumpkin_chip)
 
+def garden_spider(player):
+    if len(player.pot) <= 1:
+        print("Not enough items in your pot")
+        return
+    
+    second_player_pot = player.pot.copy()
+    last_chip = second_player_pot.pop()
+    second_to_last_chip = second_player_pot.pop()
+
+
+    if last_chip.color == "green":
+        player.rubies += 1
+
+    if second_to_last_chip == "green":
+        player.rubies += 1
+
+def ghosts_breath(player):
+    print(player.pot)
+    purple_count = 0
+
+    # Count purple chips in the pot
+    for chip in player.pot:
+        print(chip)
+        if chip.color == "purple":
+            purple_count += 1
+
+    # Award bonuses based on count
+    if purple_count >= 3:
+        # Let player choose a lower reward if desired
+        # For now, auto-apply highest reward:
+        player.victory_points += 2
+        player.droplet_position += 1  # Move droplet forward
+        print("3+ purple chips: +2 VP, droplet moves forward 1 space")
+
+    elif purple_count == 2:
+        player.victory_points += 1
+        player.rubies += 1
+        print("2 purple chips: +1 VP, +1 ruby")
+
+    elif purple_count == 1:
+        player.victory_points += 1
+        print("1 purple chip: +1 VP")
+
+    else:
+        print("No purple chips: no bonus")
+        print(purple_count)
+
+
