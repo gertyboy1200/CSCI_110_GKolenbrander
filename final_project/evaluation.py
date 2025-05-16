@@ -55,23 +55,21 @@ def garden_spider(player):
         return
     
     second_player_pot = player.pot.copy()
-    last_chip = second_player_pot.pop()
-    second_to_last_chip = second_player_pot.pop()
+    last_chip = second_player_pot[len(second_player_pot) - 1]
+    second_to_last_chip = second_player_pot[len(second_player_pot) - 2]
 
 
     if last_chip.color == "green":
         player.rubies += 1
 
-    if second_to_last_chip == "green":
+    if second_to_last_chip.color == "green":
         player.rubies += 1
 
 def ghosts_breath(player):
-    print(player.pot)
     purple_count = 0
 
     # Count purple chips in the pot
     for chip in player.pot:
-        print(chip)
         if chip.color == "purple":
             purple_count += 1
 

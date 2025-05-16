@@ -1,8 +1,22 @@
 Game Log Started
 ================
 Drawn ingredient details:
-Type: ghosts_breath_1, Color: purple, Value: 1, Cost: 9, Bonus: More purple chips grant extra victory points and rubies
+Type: garlic_3, Color: white, Value: 3, Cost: 0, Bonus: 
 Drawn ingredient details:
-Type: ghosts_breath_1, Color: purple, Value: 1, Cost: 9, Bonus: More purple chips grant extra victory points and rubies
+Type: garlic_1, Color: white, Value: 1, Cost: 0, Bonus: 
 Drawn ingredient details:
-Type: ghosts_breath_1, Color: purple, Value: 1, Cost: 9, Bonus: More purple chips grant extra victory points and rubies
+Type: garlic_1, Color: white, Value: 1, Cost: 0, Bonus: 
+Drawn ingredient details:
+Type: garlic_2, Color: white, Value: 2, Cost: 0, Bonus: 
+Drawn ingredient details:
+Type: garlic_1, Color: white, Value: 1, Cost: 0, Bonus: 
+Drawn ingredient details:
+Type: garden_spider_1, Color: green, Value: 1, Cost: 4, Bonus: Gains ruby if last or second-to-last chip
+Drawn ingredient details:
+Type: garlic_3, Color: white, Value: 3, Cost: 0, Bonus: 
+Drawn ingredient details:
+Type: garlic_2, Color: white, Value: 2, Cost: 0, Bonus: 
+Drawn ingredient details:
+Type: garlic_2, Color: white, Value: 2, Cost: 0, Bonus: 
+Drawn ingredient details:
+Type: pumpkin_1, Color: orange, Value: 1, Cost: 3, Bonus: 

@@ -1,4 +1,3 @@
-import random
 import draw_ingredients
 import os
 
@@ -29,6 +28,7 @@ for i in range(num_players):
     ingredients.initialize_bag(new_player)
     players.append(new_player)
 
+board_data = evaluation.read_board_data(filename)
 
 for round in range(2):
 
@@ -67,7 +67,7 @@ for round in range(2):
                         print("Ingredient not found in the class")
         
     clear_screen()
-    print(f"Welcome to the evaluation phase!")
+    print("Welcome to the evaluation phase!")
     print("There are 6 sections in the evaluation phase:")
     print("A: Roll the bonus die (if your pot didn't explode).")
     print("B: Resolve chip actions (purple, black, etc.).")
@@ -119,7 +119,6 @@ for round in range(2):
         print("PHASE C")
 
              
-        board_data = evaluation.read_board_data(filename)
         print(current_player_evaluating)
         if board_data[current_player_evaluating.droplet_position][2] == 1:
             print("YOU GAINED A RUBY")
@@ -180,23 +179,21 @@ for round in range(2):
 
 
 
-
-        player.reset(current_player_evaluating)
-        #player.show_bag(current_player_evaluating)
+        current_player_evaluating.reset()
 
 
         input()
 
 
+# Find the player(s) with the highest victory points
+max_score = max(player.victory_points for player in players)
+winners = [player for player in players if player.victory_points == max_score]
 
-
-    #evaluation phase
-
-
-        #for position, money, ruby, victory_points in board_data:
-        #   print(f"Space {position}: Money = {money}, Ruby = {ruby}, Victory Points = {victory_points}")
-
-
-
-
+print("\n🎉 Game Over! 🎉")
+if len(winners) == 1:
+    print(f"The winner is {winners[0].name} with {max_score} victory points!")
+else:
+    print("It's a tie!")
+    for player in winners:
+        print(f"- {player.name} with {player.victory_points} points")
 

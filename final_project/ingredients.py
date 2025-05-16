@@ -56,15 +56,15 @@ def get_ingredients():
 
 def initialize_bag(player):
     all_ingredients = get_ingredients()
-    player.bag.append(all_ingredients[13])
-    player.bag.append(all_ingredients[13])
-    player.bag.append(all_ingredients[13])
-    player.bag.append(all_ingredients[13])
-    player.bag.append(all_ingredients[13])
-    player.bag.append(all_ingredients[13])
-    player.bag.append(all_ingredients[13])
-    player.bag.append(all_ingredients[13])
-    player.bag.append(all_ingredients[13])
+    player.bag.append(all_ingredients[0])
+    player.bag.append(all_ingredients[0])
+    player.bag.append(all_ingredients[0])
+    player.bag.append(all_ingredients[0])
+    player.bag.append(all_ingredients[1])
+    player.bag.append(all_ingredients[1])
+    player.bag.append(all_ingredients[2])
+    player.bag.append(all_ingredients[3])
+    player.bag.append(all_ingredients[10])
 
 def do_ingredient_action(matching_ingredient, player):
     print("ingredient", matching_ingredient)

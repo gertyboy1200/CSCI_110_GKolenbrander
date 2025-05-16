@@ -31,17 +31,17 @@ class Player:
                 f"money: {self.money}")
 
 
-def show_bag(self):
-    print(f"{self.name}'s Bag:")
-    for chip in self.bag:
-        print(f"- {chip.type}")
+    def show_bag(self):
+        print(f"{self.name}'s Bag:")
+        for chip in self.bag:
+            print(f"- {chip.type}")
 
 
-def reset(self):
-    self.droplet_position = 0
-    self.mandrake_marker = 0
-    self.explosion_count = 0
-    self.money = 0
-    self.bag.extend(self.pot)
-    self.pot.clear() 
+    def reset(self):
+        self.droplet_position = 0
+        self.mandrake_marker = 0
+        self.explosion_count = 0
+        self.money = 0
+        self.bag.extend(self.pot)
+        self.pot.clear() 
 
