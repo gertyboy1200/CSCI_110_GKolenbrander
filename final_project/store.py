@@ -1,7 +1,5 @@
 import ingredients
 import os
-
-
 class Store:
     def __init__(self):
         self.stock = ingredients.get_ingredients()  # List of all available ingredients
@@ -23,21 +21,18 @@ class Store:
         else:
             print("Invalid chip selection.")
 
-
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
 
-
 def the_store_ui(current_player_evaluating, the_store, board_data):
-    current_player_evaluating.money = board_data[
-        current_player_evaluating.droplet_position
-    ][1]
+
+    current_player_evaluating.money = board_data[current_player_evaluating.droplet_position][1]
     bought_colors = []
     purchases = 0
 
     while purchases < 2:  # Allow up to 2 chips
         clear_screen()
-        print(f"Store - Buy Chip {purchases + 1}")
+        print(f"Store - Buy Chip {purchases+1}")
         print(f"Current Money: {current_player_evaluating.money}")
         the_store.list_items()
 
