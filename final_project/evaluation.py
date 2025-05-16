@@ -2,27 +2,31 @@ import random
 import ingredients
 
 
+# Reads board configuration from a file and returns a list of tuples.
+# Each tuple contains (droplet_position, money, ruby, victory_points)
 def read_board_data(filename):
     board_data = []
 
     with open(filename, "r") as file:
         for line in file:
+            # Skip comment lines and empty lines
             if line.startswith("#") or not line.strip():
                 continue
 
             parts = [part.strip() for part in line.split("|")]
 
-            # Convert the parts to integers
+            # Convert string parts to integers
             droplet_position = int(parts[0])
             money = int(parts[1])
             ruby = int(parts[2])
             victory_points = int(parts[3])
 
-            # Append the tuple to the board_data list
             board_data.append((droplet_position, money, ruby, victory_points))
+
     return board_data
 
 
+# Simulates rolling the bonus die and gives the appropriate reward to the player
 def bonus_die(player):
     bonuses = [
         "1 victory point",
@@ -47,19 +51,21 @@ def bonus_die(player):
     elif roll == 4:
         player.droplet_position += 1
     elif roll == 5:
-        # Add a pumpkin chip to the bag (assumes you have a create_ingredient function)
+        # Create and add a pumpkin chip (orange, value 1, no special action)
         pumpkin_chip = ingredients.create_ingredient("pumpkin_1", "orange", 1, 0)
         player.bag.append(pumpkin_chip)
 
 
+# Checks the last two chips in the pot. For each green chip among them, awards 1 ruby.
 def garden_spider(player):
+    # Need at least two chips in pot for this to apply
     if len(player.pot) <= 1:
         print("Not enough items in your pot")
         return
 
-    second_player_pot = player.pot.copy()
-    last_chip = second_player_pot[len(second_player_pot) - 1]
-    second_to_last_chip = second_player_pot[len(second_player_pot) - 2]
+    second_player_pot = player.pot.copy()  # Avoid mutating the actual pot
+    last_chip = second_player_pot[-1]
+    second_to_last_chip = second_player_pot[-2]
 
     if last_chip.color == "green":
         player.rubies += 1
@@ -68,20 +74,20 @@ def garden_spider(player):
         player.rubies += 1
 
 
+# Awards bonus based on the number of purple chips in the player's pot
 def ghosts_breath(player):
     purple_count = 0
 
-    # Count purple chips in the pot
+    # Count purple chips
     for chip in player.pot:
         if chip.color == "purple":
             purple_count += 1
 
-    # Award bonuses based on count
+    # Apply rewards based on count
     if purple_count >= 3:
-        # Let player choose a lower reward if desired
-        # For now, auto-apply highest reward:
+        # Auto-apply highest reward (can be changed later for player choice)
         player.victory_points += 2
-        player.droplet_position += 1  # Move droplet forward
+        player.droplet_position += 1
         print("3+ purple chips: +2 VP, droplet moves forward 1 space")
 
     elif purple_count == 2:

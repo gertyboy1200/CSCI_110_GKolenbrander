@@ -1,5 +1,5 @@
 """
-Quacks of Qunidlingburg Game
+Quacks of Quedlinburg Game
 Author: Garrett Kolenbrander
 CSCI 110
 Date: 16/5/25
@@ -7,9 +7,9 @@ Date: 16/5/25
 Professor: John Kull
 Final Project
 
-More information about the game can be found here
-https://cdn.1j1ju.com/medias/ba/73/db-the-quacks-of-quedlinburg-rulebook.pdf
-https://www.ultraboardgames.com/the-quacks-of-quedlinburg/ingredients.php
+More information about the game can be found here:
+- https://cdn.1j1ju.com/medias/ba/73/db-the-quacks-of-quedlinburg-rulebook.pdf
+- https://www.ultraboardgames.com/the-quacks-of-quedlinburg/ingredients.php
 """
 
 import draw_ingredients
@@ -22,6 +22,7 @@ import store
 
 
 def clear_screen():
+    # Clears the terminal screen depending on the operating system
     os.system("cls" if os.name == "nt" else "clear")
 
 
@@ -30,15 +31,18 @@ play_again = "y"
 while play_again == "y":
     filename = "board.txt"
 
+    # Load ingredients and store
     all_ingredients = ingredients.get_ingredients()
     the_store = store.Store()
 
+    # Start the game log
     with open("game_log.txt", "w") as log_file:
         log_file.write("Game Log Started\n")
         log_file.write("================\n")
 
     clear_screen()
 
+    # Set up players
     num_players = int(input("Enter the number of players: "))
     players = []
     for i in range(num_players):
@@ -49,8 +53,9 @@ while play_again == "y":
 
     board_data = evaluation.read_board_data(filename)
 
+    # Main game loop: 9 rounds
     for round in range(9):
-        # drawing phase
+        # Drawing phase
         for current_player_drawing in players:
             clear_screen()
             print("ROUND: ", round + 1)
@@ -61,6 +66,7 @@ while play_again == "y":
                     "Would you like to draw an ingredient? (y/n): "
                 ).lower()
 
+                # Stop if player has exploded
                 if current_player_drawing.explosion_count > 7:
                     print(
                         f"Your explosion count was {current_player_drawing.explosion_count}"
@@ -69,6 +75,7 @@ while play_again == "y":
 
                 if user_input != "y":
                     break
+
                 draw_ingredients.randomize_bag(current_player_drawing)
                 drawn_ingredient = draw_ingredients.draw_ingredient(
                     current_player_drawing
@@ -77,6 +84,7 @@ while play_again == "y":
                     print("Bag is empty. EXITING!!!!")
                     break
                 else:
+                    # Match drawn ingredient with its class
                     matching_ingredient = next(
                         (
                             ingredient
@@ -99,6 +107,7 @@ while play_again == "y":
                         else:
                             print("Ingredient not found in the class")
 
+        # Evaluation Phase
         clear_screen()
         print("Welcome to the evaluation phase!")
         print("There are 6 sections in the evaluation phase:")
@@ -112,18 +121,14 @@ while play_again == "y":
         clear_screen()
         print("PHASE A")
 
-        # section A
+        # Section A: Bonus die roll for leading players
         non_exploded_players = [p for p in players if p.explosion_count <= 7]
 
         if non_exploded_players:
-            # Find max droplet position
             max_position = max(p.droplet_position for p in non_exploded_players)
-
-            # Find all players at that position
             eligible_players = [
                 p for p in non_exploded_players if p.droplet_position == max_position
             ]
-
             for p in eligible_players:
                 print(f"{p.name} gets to roll the bonus die!")
                 evaluation.bonus_die(p)
@@ -131,16 +136,14 @@ while play_again == "y":
             print("No players are eligible to roll the bonus die.")
         input("press enter to continue")
 
+        # Section B–F for each player
         for current_player_evaluating in players:
-            # section B
-
             evaluation.garden_spider(current_player_evaluating)
             evaluation.ghosts_breath(current_player_evaluating)
 
-            # section C
+            # Section C: Gain rubies
             clear_screen()
             print("PHASE C")
-
             print(current_player_evaluating)
             if board_data[current_player_evaluating.droplet_position][2] == 1:
                 print("YOU GAINED A RUBY")
@@ -151,54 +154,47 @@ while play_again == "y":
 
             input("press enter to continue")
 
+            # Sections D & E depending on explosion
             if current_player_evaluating.explosion_count > 7:
                 clear_screen()
-                print(
-                    "You've EXPLODED. You will not be able to complete all phases of the evaluation phase"
-                )
+                print("You've EXPLODED. You will not be able to complete all phases.")
                 section_choice = input("You must choose between section D and E: ")
 
                 if section_choice.lower() == "d":
-                    # Section D
                     current_player_evaluating.victory_points += board_data[
                         current_player_evaluating.droplet_position
                     ][3]
 
                 elif section_choice.lower() == "e":
-                    # Section E
                     clear_screen()
                     print("PHASE E")
                     enter_store = input("Would you like to buy a chip? (Y/N): ")
-
                     if enter_store.lower() == "y":
                         store.the_store_ui(
                             current_player_evaluating, the_store, board_data
                         )
-
             else:
-                # section D
+                # Section D: Gain victory points
                 current_player_evaluating.victory_points += board_data[
                     current_player_evaluating.droplet_position
                 ][3]
 
+                # Section E: Buy chips
                 clear_screen()
                 print("PHASE E")
-
                 enter_store = input("Would you like to buy a chip? (Y/N): ")
-
                 if enter_store.lower() == "y":
                     store.the_store_ui(current_player_evaluating, the_store, board_data)
 
-            # section f
-
+            # Section F: Reset for next round
             current_player_evaluating.reset()
 
-    # Find the player(s) with the highest victory points
+    # Determine the winner(s)
     max_score = max(player.victory_points for player in players)
     winners = [player for player in players if player.victory_points == max_score]
 
     clear_screen()
-    print("\n🎉 Game Over! 🎉")
+    print("\n\U0001f389 Game Over! \U0001f389")
     if len(winners) == 1:
         print(f"The winner is {winners[0].name} with {max_score} victory points!")
     else:
@@ -209,6 +205,7 @@ while play_again == "y":
     play_again = input("Would you like to play again?? Y/N: ").lower()
 
 
+# Simple test function to verify board data loading
 def test(did_pass):
     """Print the result of a test"""
     linenum = sys._getframe(1).f_lineno

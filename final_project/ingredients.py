@@ -1,3 +1,6 @@
+# Ingredient class and related functions for "The Quacks of Quedlinburg" implementation
+
+
 class Ingredient:
     def __init__(self, type, color, value, cost, bonus=""):
         self.type = type
@@ -7,13 +10,18 @@ class Ingredient:
         self.bonus = bonus
 
     def __str__(self):
-        return f"Type: {self.type}, Color: {self.color}, Value: {self.value}, Cost: {self.cost}, Bonus: {self.bonus}"
+        return (
+            f"Type: {self.type}, Color: {self.color}, "
+            f"Value: {self.value}, Cost: {self.cost}, Bonus: {self.bonus}"
+        )
 
 
+# Factory function to create Ingredient instances
 def create_ingredient(type, color, value, cost, bonus=""):
     return Ingredient(type, color, value, cost, bonus)
 
 
+# Returns a list of all possible ingredient types in the game
 def get_ingredients():
     all_ingredients = [
         # Garlic (White) - Basic ingredient
@@ -22,7 +30,7 @@ def get_ingredients():
         create_ingredient("garlic_3", "white", 3, 0),
         # Pumpkin (Orange) - No special bonus
         create_ingredient("pumpkin_1", "orange", 1, 3),
-        # Toadstool (Red) - Moves extra if orange chips are present
+        # Toadstool (Red) - Bonus movement if orange chips are in pot
         create_ingredient(
             "toadstool_1", "red", 1, 6, "Move extra if orange chips are present"
         ),
@@ -32,7 +40,7 @@ def get_ingredients():
         create_ingredient(
             "toadstool_4", "red", 4, 16, "Move extra if orange chips are present"
         ),
-        # Mandrake (Yellow) - Doubles movement of next drawn chip
+        # Mandrake (Yellow) - Next drawn chip moves twice as far
         create_ingredient(
             "mandrake_1", "yellow", 1, 9, "Next drawn chip moves twice as far"
         ),
@@ -42,7 +50,7 @@ def get_ingredients():
         create_ingredient(
             "mandrake_4", "yellow", 4, 19, "Next drawn chip moves twice as far"
         ),
-        # Garden Spider (Green) - Gains rubies if last or second-to-last chip
+        # Garden Spider (Green) - Gains rubies if in last or second-to-last position
         create_ingredient(
             "garden_spider_1",
             "green",
@@ -64,7 +72,7 @@ def get_ingredients():
             14,
             "Gains ruby if last or second-to-last chip",
         ),
-        # Ghost’s Breath (Purple) - Grants victory points and bonuses based on quantity
+        # Ghost’s Breath (Purple) - Bonus VPs/rubies based on quantity
         create_ingredient(
             "ghosts_breath_1",
             "purple",
@@ -72,7 +80,7 @@ def get_ingredients():
             9,
             "More purple chips grant extra victory points and rubies",
         ),
-        # Crow Skull (Blue) - Grants ruby if placed on a ruby space
+        # Crow Skull (Blue) - Bonus ruby if placed on ruby space
         create_ingredient(
             "crow_skull_1", "blue", 1, 4, "Grants ruby if placed on a ruby space"
         ),
@@ -83,12 +91,14 @@ def get_ingredients():
             "crow_skull_4", "blue", 4, 14, "Grants ruby if placed on a ruby space"
         ),
     ]
-
     return all_ingredients
 
 
+# Adds starting ingredients to a player's bag
 def initialize_bag(player):
     all_ingredients = get_ingredients()
+
+    # Add starting ingredients (hardcoded default setup)
     player.bag.append(all_ingredients[0])
     player.bag.append(all_ingredients[0])
     player.bag.append(all_ingredients[0])
@@ -97,40 +107,34 @@ def initialize_bag(player):
     player.bag.append(all_ingredients[1])
     player.bag.append(all_ingredients[2])
     player.bag.append(all_ingredients[3])
-    player.bag.append(all_ingredients[10])
+    player.bag.append(all_ingredients[10])  # garden_spider_1
 
 
+# Dispatches the appropriate action based on the ingredient's color
 def do_ingredient_action(matching_ingredient, player):
     print("ingredient", matching_ingredient)
 
     if matching_ingredient.color == "white":
         garlic(matching_ingredient, player)
-
     elif matching_ingredient.color == "orange":
         pumpkin(matching_ingredient, player)
-
     elif matching_ingredient.color == "yellow":
         mandrake(matching_ingredient, player)
-
     elif matching_ingredient.color == "green":
         garden_spider(matching_ingredient, player)
-
     elif matching_ingredient.color == "red":
         toadstool(matching_ingredient, player)
-
     elif matching_ingredient.color == "purple":
         ghosts_breath(matching_ingredient, player)
-
     elif matching_ingredient.color == "blue":
         crow_skull(matching_ingredient, player)
-
     else:
         print("ERRORRRRR")
 
 
+# Garlic: Simple movement and explosion risk
 def garlic(matching_ingredient, player):
     player.explosion_count += matching_ingredient.value
-
     if player.mandrake_marker == 1:
         player.droplet_position += matching_ingredient.value * 2
         player.mandrake_marker = 0
@@ -138,10 +142,10 @@ def garlic(matching_ingredient, player):
         player.droplet_position += matching_ingredient.value
     else:
         print("ERROR")
-
     return player
 
 
+# Pumpkin: Basic chip with no effect other than movement
 def pumpkin(matching_ingredient, player):
     if player.mandrake_marker == 1:
         player.droplet_position += matching_ingredient.value * 2
@@ -150,16 +154,10 @@ def pumpkin(matching_ingredient, player):
         player.droplet_position += matching_ingredient.value
     else:
         print("ERROR")
-
     return player
 
 
-# If you draw a red chip from your bag and there are no orange chips in your pot,
-# move the red chip forward only according to the value depicted on it.
-# If there are already 1 or 2 orange chips in your pot,
-# move the red chip an additional 1 space forward irrespective of its value.
-
-
+# Toadstool: Gains bonus movement depending on number of orange chips in pot
 def toadstool(matching_ingredient, player):
     if player.mandrake_marker == 1:
         player.droplet_position += matching_ingredient.value * 2
@@ -169,25 +167,19 @@ def toadstool(matching_ingredient, player):
     else:
         print("ERROR")
 
-    total_orange_in_pot = 0
-
-    for chip in player.pot:
-        if chip.color == "orange":
-            total_orange_in_pot += 1
+    # Count orange chips already in the pot
+    total_orange_in_pot = sum(1 for chip in player.pot if chip.color == "orange")
 
     if total_orange_in_pot == 1 or total_orange_in_pot == 2:
         player.droplet_position += 1
     elif total_orange_in_pot >= 3:
         player.droplet_position += 2
     else:
-        print("you had no orange chips no bonus")
+        print("you had no orange chips, no bonus")
+    return player
 
 
-# Bonus: If you draw a yellow chip from the bag, move the next chip that you draw twice as far.
-# For instance, a 2-chip that is drawn after a yellow chip is moved 4 spaces forward.
-# The values of the yellow chips are of no significance.
-
-
+# Mandrake: Sets marker to double the next chip's movement
 def mandrake(matching_ingredient, player):
     if player.mandrake_marker == 1:
         player.droplet_position += matching_ingredient.value * 2
@@ -201,11 +193,7 @@ def mandrake(matching_ingredient, player):
     return player
 
 
-# Bonus: In Evaluation Phase B, you receive 1 ruby for every green chip
-# (irrespective of its value) that was either the last chip placed in your pot or next to last.
-# You do not receive any rubies for any green chips that are not on your last or next to last space.
-
-
+# Garden Spider: Only its position matters in the pot (evaluated elsewhere)
 def garden_spider(matching_ingredient, player):
     if player.mandrake_marker == 1:
         player.droplet_position += matching_ingredient.value * 2
@@ -214,18 +202,10 @@ def garden_spider(matching_ingredient, player):
         player.droplet_position += matching_ingredient.value
     else:
         print("ERROR")
-
     return player
 
 
-# Bonus: In Evaluation Phase B, count up the purple chips in your pot.
-# If there is 1 purple chip, you receive 1 victory point.
-# If there are 2 purple chips, you receive 1 victory point and 1 ruby.
-# If there are 3 or more purple chips, you receive 2 victory points and you may move your droplet 1 space forward.
-# There is no added bonus for 4 or more chips. However, it is always possible to use a lower action.
-# For example, you can take the bonus for 2 purple chips even though you have 3 chips.
-
-
+# Ghost’s Breath: Bonus effects based on quantity, applied in evaluation phase
 def ghosts_breath(matching_ingredient, player):
     if player.mandrake_marker == 1:
         player.droplet_position += matching_ingredient.value * 2
@@ -234,14 +214,10 @@ def ghosts_breath(matching_ingredient, player):
         player.droplet_position += matching_ingredient.value
     else:
         print("ERROR")
-
     return player
 
 
-# Bonus: If you place a blue chip on a ruby space, you immediately receive 1 ruby.
-# The values of the blue chips are of no significance.
-
-
+# Crow Skull: Bonus awarded only if placed on a ruby space (checked elsewhere)
 def crow_skull(matching_ingredient, player):
     if player.mandrake_marker == 1:
         player.droplet_position += matching_ingredient.value * 2
@@ -250,5 +226,4 @@ def crow_skull(matching_ingredient, player):
         player.droplet_position += matching_ingredient.value
     else:
         print("ERROR")
-
     return player
