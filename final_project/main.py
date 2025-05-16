@@ -6,10 +6,12 @@ import player
 import evaluation
 import store
 
+
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
 
-filename = 'board.txt'
+
+filename = "board.txt"
 
 all_ingredients = ingredients.get_ingredients()
 the_store = store.Store()
@@ -19,7 +21,7 @@ with open("game_log.txt", "w") as log_file:
     log_file.write("================\n")
 
 clear_screen()
-    
+
 num_players = int(input("Enter the number of players: "))
 players = []
 for i in range(num_players):
@@ -31,21 +33,22 @@ for i in range(num_players):
 board_data = evaluation.read_board_data(filename)
 
 for round in range(2):
-
-    #drawing phase
+    # drawing phase
     for current_player_drawing in players:
         clear_screen()
         print("ROUND: ", round + 1)
         print(f"\n--- {current_player_drawing.name}'s turn ---\n")
-        
+
         while True:
             user_input = input("Would you like to draw an ingredient? (y/n): ").lower()
 
             if current_player_drawing.explosion_count > 7:
-                print(f"Your explosion count was {current_player_drawing.explosion_count}")
+                print(
+                    f"Your explosion count was {current_player_drawing.explosion_count}"
+                )
                 break
 
-            if user_input != 'y':
+            if user_input != "y":
                 break
             draw_ingredients.randomize_bag(current_player_drawing)
             drawn_ingredient = draw_ingredients.draw_ingredient(current_player_drawing)
@@ -53,11 +56,20 @@ for round in range(2):
                 print("Bag is empty. EXITING!!!!")
                 break
             else:
-                matching_ingredient = next((ingredient for ingredient in all_ingredients if ingredient.type == drawn_ingredient), None)
+                matching_ingredient = next(
+                    (
+                        ingredient
+                        for ingredient in all_ingredients
+                        if ingredient.type == drawn_ingredient
+                    ),
+                    None,
+                )
 
                 with open("game_log.txt", "a") as log_file:
                     if drawn_ingredient:
-                        ingredients.do_ingredient_action(drawn_ingredient, current_player_drawing)
+                        ingredients.do_ingredient_action(
+                            drawn_ingredient, current_player_drawing
+                        )
                         log_file.write("Drawn ingredient details:\n")
                         log_file.write(str(drawn_ingredient) + "\n")
                         print()
@@ -65,7 +77,7 @@ for round in range(2):
                         print()
                     else:
                         print("Ingredient not found in the class")
-        
+
     clear_screen()
     print("Welcome to the evaluation phase!")
     print("There are 6 sections in the evaluation phase:")
@@ -78,7 +90,7 @@ for round in range(2):
     input("press enter to continue")
     clear_screen()
     print("PHASE A")
-        
+
     non_exploded_players = [p for p in players if p.explosion_count <= 7]
 
     if non_exploded_players:
@@ -86,7 +98,9 @@ for round in range(2):
         max_position = max(p.droplet_position for p in non_exploded_players)
 
         # Find all players at that position
-        eligible_players = [p for p in non_exploded_players if p.droplet_position == max_position]
+        eligible_players = [
+            p for p in non_exploded_players if p.droplet_position == max_position
+        ]
 
         for p in eligible_players:
             print(f"{p.name} gets to roll the bonus die!")
@@ -96,29 +110,25 @@ for round in range(2):
     input("press enter to continue")
 
     for current_player_evaluating in players:
-
-
-
         # section A
-        #if current players droplet position is greater than all others roll die
+        # if current players droplet position is greater than all others roll die
 
         # section B
-        #chip actions
+        # chip actions
         clear_screen()
         print("PHASE B")
 
-        #evaluate green and purple
+        # evaluate green and purple
         evaluation.garden_spider(current_player_evaluating)
         evaluation.ghosts_breath(current_player_evaluating)
 
         input("press enter to continue")
 
         # section C
-        #gain rubies if landed on ruby space
+        # gain rubies if landed on ruby space
         clear_screen()
         print("PHASE C")
 
-             
         print(current_player_evaluating)
         if board_data[current_player_evaluating.droplet_position][2] == 1:
             print("YOU GAINED A RUBY")
@@ -129,20 +139,23 @@ for round in range(2):
 
         input("press enter to continue")
 
-
         # section D
 
         #
         if current_player_evaluating.explosion_count > 7:
             clear_screen()
-            print("You've EXPLODED. You will not be able to complete all phases of the evaluation phase")
+            print(
+                "You've EXPLODED. You will not be able to complete all phases of the evaluation phase"
+            )
             section_choice = input("You must choose between section D and E: ")
 
             if section_choice.lower() == "d":
                 # Section D
                 clear_screen()
                 print("PHASE D")
-                current_player_evaluating.victory_points += board_data[current_player_evaluating.droplet_position][3]
+                current_player_evaluating.victory_points += board_data[
+                    current_player_evaluating.droplet_position
+                ][3]
                 input("Press enter to continue")
 
             elif section_choice.lower() == "e":
@@ -154,17 +167,16 @@ for round in range(2):
                 if enter_store.lower() == "y":
                     store.the_store_ui(current_player_evaluating, the_store, board_data)
 
-
-
-
         else:
-            #section D
+            # section D
             clear_screen()
             print("PHASE D")
-            current_player_evaluating.victory_points += board_data[current_player_evaluating.droplet_position][3]
+            current_player_evaluating.victory_points += board_data[
+                current_player_evaluating.droplet_position
+            ][3]
             input("press enter to continue")
-            #section E
-            
+            # section E
+
             clear_screen()
             print("PHASE E")
 
@@ -173,14 +185,9 @@ for round in range(2):
             if enter_store.lower() == "y":
                 store.the_store_ui(current_player_evaluating, the_store, board_data)
 
-
-
-        #section f
-
-
+        # section f
 
         current_player_evaluating.reset()
-
 
         input()
 
@@ -196,4 +203,3 @@ else:
     print("It's a tie!")
     for player in winners:
         print(f"- {player.name} with {player.victory_points} points")
-
